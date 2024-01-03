@@ -37,7 +37,9 @@ namespace PointOfSale_System.Forms
             dgvSales.Columns.Add("ProductPrice", "Price");
             dgvSales.Columns.Add("Quantity", "Quantity");
             dgvSales.Columns.Add("TotalAmount", "Total Amount");
-            dgvSales.Columns["ProductName"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dgvSales.Columns.Add("Discount", "Discount Per Item (%)");
+          
+           
 
 
         }
@@ -84,6 +86,8 @@ namespace PointOfSale_System.Forms
             }
         }
 
+
+        //add sale to datagridview and database
         private void btnAddToSale_Click(object sender, EventArgs e)
         {
 
@@ -95,36 +99,70 @@ namespace PointOfSale_System.Forms
 
             // Extract product details from the selected item
             DataRowView selectedDataRow = (DataRowView)lstProductList.SelectedItem;
-            int productId = Convert.ToInt32(selectedDataRow["Id"]); 
+         
+            productId = Convert.ToInt32(selectedDataRow["Id"]); 
             string productName = selectedDataRow["Name"].ToString();
             double productPrice = Convert.ToDouble(selectedDataRow["Price"]);
 
 
-             sale.QuantitySold = (int)nudEnterQuantity.Value;
-             sale.TotalAmount = productPrice * sale.QuantitySold;
+            sale.QuantitySold = (int)nudEnterQuantity.Value;
+            double discountPercentage = (double)nudDiscountPerItem.Value / 100;
+            double discountAmount = productPrice * discountPercentage;
+            double priceAfterDiscount = productPrice - discountAmount;
+            sale.TotalAmount = priceAfterDiscount * sale.QuantitySold;
+            sale.DiscountPerItem = discountPercentage;
 
 
             // Add to DataGridView
             DataGridViewRow newRow = new DataGridViewRow();
             newRow.CreateCells(dgvSales);
-            newRow.SetValues(productName, productPrice, sale.QuantitySold, sale.TotalAmount);
+            newRow.SetValues(productName, productPrice, sale.QuantitySold, sale.TotalAmount, sale.DiscountPerItem * 100); 
             dgvSales.Rows.Add(newRow);
 
             saleServices.Add(productId, sale);
             CalculateGrandTotal();
 
+            UpdateTotalDiscountAndGrandTotal();
         }
 
+        private void UpdateTotalDiscountAndGrandTotal()
+        {
+            var totalDiscount = CalculateTotalDiscount();
+            lblPerInvoiceDiscount.Text = $"Total Discount\t: {totalDiscount:C}";
+
+            CalculateGrandTotal();
+        }
+
+
+
+        //calculate the discount for per invoice
+        private decimal CalculateTotalDiscount()
+        {
+            decimal totalDiscount = 0;
+            foreach (DataGridViewRow row in dgvSales.Rows)
+            {
+                decimal price = Convert.ToDecimal(row.Cells["ProductPrice"].Value);
+                decimal quantity = Convert.ToDecimal(row.Cells["Quantity"].Value);
+                decimal discountPercentage = Convert.ToDecimal(row.Cells["Discount"].Value) / 100;
+                totalDiscount += price * discountPercentage * quantity;
+            }
+            return totalDiscount;
+        }
 
         //calculate grand total
         private decimal CalculateGrandTotal()
         {
             decimal grandTotal = 0;
+            
             foreach (DataGridViewRow row in dgvSales.Rows)
             {
                 grandTotal += Convert.ToDecimal(row.Cells["TotalAmount"].Value);
+                
             }
-            lblGrandTotal.Text = $"Grand Total: {grandTotal:C}";
+
+            lblGrandTotal.Text = $"Grand Total\t: {grandTotal:C}";
+           
+
 
             return grandTotal;
         }
@@ -147,7 +185,8 @@ namespace PointOfSale_System.Forms
                 {
                     ProductName = row.Cells["ProductName"].Value.ToString(),
                     Quantity = Convert.ToInt32(row.Cells["Quantity"].Value),
-                    TotalAmount = Convert.ToDouble(row.Cells["TotalAmount"].Value)
+                    TotalAmount = Convert.ToDouble(row.Cells["TotalAmount"].Value),
+                    DiscountPerItem = Convert.ToDouble(row.Cells["Discount"].Value)
                 };
                 details.Add(detail);
             }
@@ -166,8 +205,5 @@ namespace PointOfSale_System.Forms
             checkoutForm.Show();
             this.Hide();
         }
-
-          
-        
     }
 }

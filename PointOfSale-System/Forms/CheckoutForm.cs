@@ -42,7 +42,7 @@ namespace PointOfSale_System.Forms
 
             foreach (var item in saleDetails)
             {
-                receiptContent.AppendLine($"{item.ProductName} - Quantity: {item.Quantity} - Total: ${item.TotalAmount}");
+                receiptContent.AppendLine($"{item.ProductName} - Quantity: {item.Quantity} - Total: ${item.TotalAmount} - DiscountPerItem: {item.DiscountPerItem} %");
             }
 
             receiptContent.AppendLine($"\nGrand Total: ${grandTotal}");

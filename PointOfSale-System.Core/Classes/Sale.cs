@@ -11,5 +11,7 @@ namespace PointOfSale_System.Core.Classes
         public int QuantitySold { get; set; }
 
         public double TotalAmount { get; set; }
+
+        public double DiscountPerItem { get; set; }
     }
 }
