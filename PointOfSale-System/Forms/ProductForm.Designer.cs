@@ -212,9 +212,10 @@
             this.dgvProductData.Location = new System.Drawing.Point(60, 313);
             this.dgvProductData.Name = "dgvProductData";
             this.dgvProductData.ReadOnly = true;
+            this.dgvProductData.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvProductData.Size = new System.Drawing.Size(394, 150);
             this.dgvProductData.TabIndex = 7;
-            this.dgvProductData.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.dgvProductData_MouseDoubleClick);
+            this.dgvProductData.SelectionChanged += new System.EventHandler(this.dgvProductData_SelectionChanged);
             // 
             // btnSearchProduct
             // 

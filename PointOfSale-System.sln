@@ -5,7 +5,7 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PointOfSale-System", "PointOfSale-System\PointOfSale-System.csproj", "{8B419994-A608-460D-8514-FC1F79935771}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PointOfSale-System.Core", "PointOfSale-System.Core\PointOfSale-System.Core.csproj", "{74B36CF2-9E01-47FF-A4DD-C560A6620B23}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PointOfSale.System.Core", "PointOfSale-System.Core\PointOfSale.System.Core.csproj", "{74B36CF2-9E01-47FF-A4DD-C560A6620B23}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

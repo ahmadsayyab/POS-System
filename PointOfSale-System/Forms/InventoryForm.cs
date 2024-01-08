@@ -13,7 +13,7 @@ namespace PointOfSale_System.Forms
 {
     public partial class InventoryForm : Form
     {
-        Services services = new Services();
+        BaseService services = new BaseService();
         public InventoryForm()
         {
             InitializeComponent();

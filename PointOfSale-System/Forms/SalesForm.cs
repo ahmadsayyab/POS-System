@@ -9,13 +9,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
 namespace PointOfSale_System.Forms
 {
     public partial class SalesForm : Form
     {
-        Services services = new Services();
+        BaseService service = new BaseService();
         Sale sale = new Sale();
-        SaleServices saleServices = new SaleServices();
+        SaleService saleService = new SaleService();
 
 
 
@@ -48,7 +49,7 @@ namespace PointOfSale_System.Forms
         //display products name in the listbox
         void BindListView()
         {
-            DataTable products = services.LoadProductData();
+            DataTable products = service.LoadProductData();
             lstProductList.DataSource = products;
             lstProductList.DisplayMember = "Name";
 
@@ -119,7 +120,7 @@ namespace PointOfSale_System.Forms
             newRow.SetValues(productName, productPrice, sale.QuantitySold, sale.TotalAmount, sale.DiscountPerItem * 100); 
             dgvSales.Rows.Add(newRow);
 
-            saleServices.Add(productId, sale);
+            saleService.Add(productId, sale);
             CalculateGrandTotal();
 
             UpdateTotalDiscountAndGrandTotal();

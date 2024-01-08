@@ -20,10 +20,10 @@ namespace PointOfSale_System.Forms
     {
 
 
-        Services services = new Services();
+        BaseService baseService = new BaseService();
        
         Product product = new Product();
-        ProductServices productServices = new ProductServices();
+        ProductService productService = new ProductService();
 
         int id;
         bool result;
@@ -90,7 +90,7 @@ namespace PointOfSale_System.Forms
                 product.Price = double.Parse(txtPrice.Text.Trim());
                 product.Quantity = int.Parse(txtQuantity.Text.Trim());
 
-                result = productServices.Add(product);
+                result = productService.Add(product);
 
                 if (result == true)
                 {
@@ -111,25 +111,18 @@ namespace PointOfSale_System.Forms
         //load proudct data into datagridview
         void BindGridView()
         {
-            dgvProductData.DataSource = services.LoadProductData();
+            dgvProductData.DataSource = baseService.LoadProductData();
+            dgvProductData.Columns["Id"].Visible = false;
+            dgvProductData.Columns["IsActive"].Visible = false;
 
         }
 
         private void ProductForm_Load(object sender, EventArgs e)
         {
             BindGridView();
+            dgvProductData.ClearSelection();
         }
 
-
-        //double click a row in datagridview
-        private void dgvProductData_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            id = Convert.ToInt32(dgvProductData.SelectedRows[0].Cells[0].Value);
-            txtName.Text = dgvProductData.SelectedRows[0].Cells[1].Value.ToString();
-            txtPrice.Text = dgvProductData.SelectedRows[0].Cells[2].Value.ToString();
-            txtQuantity.Text = dgvProductData.SelectedRows[0].Cells[3].Value.ToString();
-           
-        }
 
 
         //update product data
@@ -146,7 +139,8 @@ namespace PointOfSale_System.Forms
                 product.Quantity = Convert.ToInt32(txtQuantity.Text.Trim());
 
 
-                result = productServices.Update(product, id);
+                result = productService.Update(product,id);
+                //result = productService.Update(product);
 
                 if (result == true)
                 {
@@ -181,7 +175,7 @@ namespace PointOfSale_System.Forms
                 if (confirm == DialogResult.Yes)
                 {
 
-                    result = productServices.Delete(id);
+                    result = productService.Delete(id);
 
                     if (result == true)
                     {
@@ -219,11 +213,11 @@ namespace PointOfSale_System.Forms
             else
             {
                 string productName = txtSearch.Text;
-                DataTable searchResult = productServices.Search(productName);
+                DataTable searchResult = productService.Search(productName);
 
                 if (searchResult.Rows.Count == 0)
                 {
-                    MessageBox.Show("No products found with the provided name.", "Search Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("No product found with the provided name.", "Search Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     txtSearch.Focus();
                 }
                 else
@@ -239,6 +233,24 @@ namespace PointOfSale_System.Forms
             frmMain frmMain = new frmMain();
             frmMain.Show();
             this.Hide();
+        }
+
+        private void dgvProductData_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dgvProductData.SelectedRows.Count > 0)
+            {
+                DataGridViewRow selectedRow = dgvProductData.SelectedRows[0];
+
+                
+                id = Convert.ToInt32(selectedRow.Cells[0].Value);
+                txtName.Text = selectedRow.Cells[1].Value.ToString();
+                txtPrice.Text = selectedRow.Cells[2].Value.ToString();
+                txtQuantity.Text = selectedRow.Cells[3].Value.ToString();
+            }
+            else
+            {
+               ResetFields();
+            }
         }
     }
 }

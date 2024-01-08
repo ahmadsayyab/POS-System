@@ -133,9 +133,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PointOfSale-System.Core\PointOfSale-System.Core.csproj">
+    <ProjectReference Include="..\PointOfSale-System.Core\PointOfSale.System.Core.csproj">
       <Project>{74b36cf2-9e01-47ff-a4dd-c560a6620b23}</Project>
-      <Name>PointOfSale-System.Core</Name>
+      <Name>PointOfSale.System.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
